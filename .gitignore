@@ -1,0 +1,5 @@
+/.phpunit.cache
+/tests/write.csv
+/vendor
+/.phpunit.result.cache
+composer.lock

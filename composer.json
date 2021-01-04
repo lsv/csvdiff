@@ -1,0 +1,31 @@
+{
+    "name": "lsv/csvdiff",
+    "description": "Diff csv files",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Aarhof",
+            "email": "martin.aarhof@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Lsv\\CsvDiff\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=7.3",
+        "ext-json": "*",
+        "symfony/console": "^5.2",
+        "symfony/process": "^5.2"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lsv\\CsvDiffTest\\": "tests"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "vimeo/psalm": "^4.3"
+    }
+}

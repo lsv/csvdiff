@@ -16,7 +16,7 @@ php index.php <old file> <new file> <write file>
 ### Install
 
 ```
-git clone lsv/csvdiff
+git clone https://github.com/lsv/csvdiff.git
 cd csvdiff
 composer install
 php index.php <old file> <new file> <write file>

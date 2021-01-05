@@ -5,6 +5,7 @@ namespace Lsv\CsvDiffTest\Command;
 use Generator;
 use Lsv\CsvDiff\Command\CsvDiffCommand;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CsvDiffCommandTest extends TestCase
@@ -51,7 +52,7 @@ class CsvDiffCommandTest extends TestCase
             ]
         );
         $display = $tester->getDisplay();
-        self::assertStringEndsWith('is written', $display);
+        self::assertStringStartsWith('Diff file', $display);
 
         $data = file_get_contents($write);
         self::assertCount($lines, explode("\n", $data));
@@ -63,6 +64,8 @@ class CsvDiffCommandTest extends TestCase
 
     public function testNewFileDoesNotExists(): void
     {
+        $this->expectException(RuntimeException::class);
+
         $tester = new CommandTester(new CsvDiffCommand());
         $tester->execute(
             [
@@ -70,12 +73,12 @@ class CsvDiffCommandTest extends TestCase
                 'new' => 'file_does_not_exists',
             ]
         );
-        self::assertStringContainsString('file does not exists or is not readable', $tester->getDisplay(true));
-        self::assertSame(0, $tester->getStatusCode());
     }
 
     public function testOldFileDoesNotExists(): void
     {
+        $this->expectException(RuntimeException::class);
+
         $tester = new CommandTester(new CsvDiffCommand());
         $tester->execute(
             [
@@ -83,12 +86,12 @@ class CsvDiffCommandTest extends TestCase
                 'new' => __DIR__ . '/../smallnew.csv'
             ]
         );
-        self::assertStringContainsString('file does not exists or is not readable', $tester->getDisplay(true));
-        self::assertSame(0, $tester->getStatusCode());
     }
 
     public function testWriteFileNotWritable(): void
     {
+        $this->expectException(RuntimeException::class);
+
         $tester = new CommandTester(new CsvDiffCommand());
         $tester->execute(
             [
@@ -97,8 +100,6 @@ class CsvDiffCommandTest extends TestCase
                 'write' => __DIR__,
             ]
         );
-        self::assertStringContainsString('is not writable', $tester->getDisplay(true));
-        self::assertSame(0, $tester->getStatusCode());
     }
 
 }

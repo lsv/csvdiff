@@ -7,7 +7,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
 class CsvDiffCommand extends Command
@@ -38,20 +37,15 @@ class CsvDiffCommand extends Command
         }
         // @codeCoverageIgnoreEnd
 
-        $io = new SymfonyStyle($input, $output);
         $old = realpath($old);
         $new = realpath($new);
 
         if (!file_exists($old) || !is_readable($old)) {
-            $io->error('The "old" file ('.$old.') file does not exists or is not readable');
-
-            return 0;
+            throw new RuntimeException('The "old" file ('.$old.') file does not exists or is not readable');
         }
 
         if (!file_exists($new) || !is_readable($new)) {
-            $io->error('The "new" file ('.$new.') file does not exists or is not readable');
-
-            return 0;
+            throw new RuntimeException('The "new" file ('.$new.') file does not exists or is not readable');
         }
 
         $newcsv = $this->getDiff($new, $old);
@@ -64,9 +58,7 @@ class CsvDiffCommand extends Command
             // @codeCoverageIgnoreEnd
 
             if (!$writeHandler = @fopen($write, 'wb')) {
-                $io->error('The "write" file ('.$write.') is not writable');
-
-                return 0;
+                throw new RuntimeException('The "write" file ('.$write.') is not writable');
             }
 
             fwrite($writeHandler, $newcsv);
